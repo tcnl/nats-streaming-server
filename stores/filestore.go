@@ -29,8 +29,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	HbInboxMap "github.com/tcnl/nats-streaming-server/server"
-
 	"github.com/nats-io/nats-streaming-server/logger"
 	"github.com/nats-io/nats-streaming-server/spb"
 	"github.com/nats-io/nats-streaming-server/util"
@@ -209,6 +207,9 @@ var DefaultFileStoreOptions = FileStoreOptions{
 
 // EnforcingLimits : Server is blocking excess messages
 var EnforcingLimits = false
+
+// HbInboxMap : Mapping from HbInboxes to *nats.Conn
+var HbInboxMap = make(map[string]*nats.Conn)
 
 // BufferSize is a FileStore option that sets the size of the buffer used
 // during store writes. This can help improve write performance.

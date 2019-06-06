@@ -19,6 +19,7 @@ import (
 	"time"
 
 	EnforcingLimits "github.com/tcnl/nats-streaming-server/stores"
+	HbInboxMap "github.com/tcnl/nats-streaming-server/stores"
 
 	"github.com/nats-io/nats-streaming-server/spb"
 	"github.com/nats-io/nats-streaming-server/stores"
@@ -29,9 +30,6 @@ const (
 	maxKnownInvalidConns   = 256
 	pruneKnownInvalidConns = 32
 )
-
-// HbInboxMap : Mappping from connIDs to clients
-var HbInboxMap = make(map[string]*nats.Conn)
 
 // This is a proxy to the store interface.
 type clientStore struct {
