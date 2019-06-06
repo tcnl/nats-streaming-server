@@ -8,6 +8,7 @@ require (
 	github.com/hashicorp/go-msgpack v0.5.5
 	github.com/hashicorp/raft v1.1.0
 	github.com/lib/pq v1.1.1
+	github.com/nats-io/go-nats v1.8.1
 	github.com/nats-io/nats-server/v2 v2.0.0
 	github.com/nats-io/nats.go v1.8.1
 	github.com/nats-io/nuid v1.0.1

@@ -29,6 +29,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	HbInboxMap "github.com/tcnl/nats-streaming-server/server"
+
 	"github.com/nats-io/nats-streaming-server/logger"
 	"github.com/nats-io/nats-streaming-server/spb"
 	"github.com/nats-io/nats-streaming-server/util"
@@ -2900,7 +2902,7 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 		}
 	}
 
-	defer EnforcingLimits = false
+	EnforcingLimits = false
 
 	return nil
 }
