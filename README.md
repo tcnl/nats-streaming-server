@@ -825,13 +825,13 @@ various general statistics.
 ```
 {
   "cluster_id": "test-cluster",
-  "server_id": "6U4KtjiZTmc5tbk2VJsnwW",
-  "version": "0.14.1",
-  "go": "go1.11.9",
+  "server_id": "NSqMILe1E8aoN8H9N9EMlx",
+  "version": "0.15.1",
+  "go": "go1.11.10",
   "state": "STANDALONE",
-  "now": "2019-04-23T19:57:49.816691-06:00",
-  "start_time": "2019-04-23T19:57:47.920168-06:00",
-  "uptime": "1s",
+  "now": "2019-06-05T12:42:03.125071-06:00",
+  "start_time": "2019-06-05T12:41:50.091142-06:00",
+  "uptime": "13s",
   "clients": 0,
   "subscriptions": 0,
   "channels": 0,
@@ -845,14 +845,14 @@ Here is an example:
 ```
 {
   "cluster_id": "test-cluster",
-  "server_id": "6QXPWQ1krx6XTBx5fLcvwY",
-  "version": "0.14.1",
-  "go": "go1.11.9",
+  "server_id": "4e0SiYIpAp2AfvnoVC9Muo",
+  "version": "0.15.1",
+  "go": "go1.11.10",
   "state": "CLUSTERED",
-  "role": "Leader",
-  "now": "2019-04-23T19:58:18.337411-06:00",
-  "start_time": "2019-04-23T19:58:14.051974-06:00",
-  "uptime": "4s",
+  "role": "Follower",
+  "now": "2019-06-05T12:43:17.014304-06:00",
+  "start_time": "2019-06-05T12:43:14.710972-06:00",
+  "uptime": "2s",
   "clients": 0,
   "subscriptions": 0,
   "channels": 0,
@@ -1174,26 +1174,27 @@ The NATS Streaming Server embeds a NATS Server. Starting the server with no argu
 
 ```
 > ./nats-streaming-server
-[40176] 2019/04/23 19:57:13.255548 [INF] STREAM: Starting nats-streaming-server[test-cluster] version 0.14.1
-[40176] 2019/04/23 19:57:13.255708 [INF] STREAM: ServerID: 1YXCKvEKwKAzr3D7E5VOoq
-[40176] 2019/04/23 19:57:13.255725 [INF] STREAM: Go version: go1.11.9
-[40176] 2019/04/23 19:57:13.255727 [INF] STREAM: Git commit: [not set]
-[40176] 2019/04/23 19:57:13.256217 [INF] Starting nats-server version 1.4.1
-[40176] 2019/04/23 19:57:13.256223 [INF] Git commit [not set]
-[40176] 2019/04/23 19:57:13.256450 [INF] Listening for client connections on 0.0.0.0:4222
-[40176] 2019/04/23 19:57:13.256455 [INF] Server is ready
-[40176] 2019/04/23 19:57:13.288526 [INF] STREAM: Recovering the state...
-[40176] 2019/04/23 19:57:13.288549 [INF] STREAM: No recovered state
-[40176] 2019/04/23 19:57:13.540230 [INF] STREAM: Message store is MEMORY
-[40176] 2019/04/23 19:57:13.540290 [INF] STREAM: ---------- Store Limits ----------
-[40176] 2019/04/23 19:57:13.540296 [INF] STREAM: Channels:                  100 *
-[40176] 2019/04/23 19:57:13.540300 [INF] STREAM: --------- Channels Limits --------
-[40176] 2019/04/23 19:57:13.540303 [INF] STREAM:   Subscriptions:          1000 *
-[40176] 2019/04/23 19:57:13.540307 [INF] STREAM:   Messages     :       1000000 *
-[40176] 2019/04/23 19:57:13.540310 [INF] STREAM:   Bytes        :     976.56 MB *
-[40176] 2019/04/23 19:57:13.540314 [INF] STREAM:   Age          :     unlimited *
-[40176] 2019/04/23 19:57:13.540317 [INF] STREAM:   Inactivity   :     unlimited *
-[40176] 2019/04/23 19:57:13.540321 [INF] STREAM: ----------------------------------
+[93817] 2019/06/05 12:44:10.895877 [INF] STREAM: Starting nats-streaming-server[test-cluster] version 0.15.1
+[93817] 2019/06/05 12:44:10.895928 [INF] STREAM: ServerID: TXER4DTyF8rzvL8vJdZhfp
+[93817] 2019/06/05 12:44:10.895930 [INF] STREAM: Go version: go1.11.10
+[93817] 2019/06/05 12:44:10.895933 [INF] STREAM: Git commit: [not set]
+[93817] 2019/06/05 12:44:10.896500 [INF] Starting nats-server version 2.0.0
+[93817] 2019/06/05 12:44:10.896508 [INF] Git commit [not set]
+[93817] 2019/06/05 12:44:10.896694 [INF] Listening for client connections on 0.0.0.0:4222
+[93817] 2019/06/05 12:44:10.896698 [INF] Server id is NC2GAQMFV5JQVZUZAHQ3VH3G6ZVHRF3XT7IRWI3KFBRWAL5XVUW6RMJ6
+[93817] 2019/06/05 12:44:10.896701 [INF] Server is ready
+[93817] 2019/06/05 12:44:10.928786 [INF] STREAM: Recovering the state...
+[93817] 2019/06/05 12:44:10.928805 [INF] STREAM: No recovered state
+[93817] 2019/06/05 12:44:11.179257 [INF] STREAM: Message store is MEMORY
+[93817] 2019/06/05 12:44:11.179319 [INF] STREAM: ---------- Store Limits ----------
+[93817] 2019/06/05 12:44:11.179325 [INF] STREAM: Channels:                  100 *
+[93817] 2019/06/05 12:44:11.179329 [INF] STREAM: --------- Channels Limits --------
+[93817] 2019/06/05 12:44:11.179333 [INF] STREAM:   Subscriptions:          1000 *
+[93817] 2019/06/05 12:44:11.179336 [INF] STREAM:   Messages     :       1000000 *
+[93817] 2019/06/05 12:44:11.179340 [INF] STREAM:   Bytes        :     976.56 MB *
+[93817] 2019/06/05 12:44:11.179344 [INF] STREAM:   Age          :     unlimited *
+[93817] 2019/06/05 12:44:11.179347 [INF] STREAM:   Inactivity   :     unlimited *
+[93817] 2019/06/05 12:44:11.179351 [INF] STREAM: ----------------------------------
 ```
 
 The server will be started and listening for client connections on port 4222 (the default) from all available interfaces. The logs will be displayed to stderr as shown above.
@@ -1770,13 +1771,14 @@ Below is what would be displayed with the above store limits configuration. Noti
 how `foo.bar.>` is indented compared to `foo.>` to show the inheritance.
 
 ```
-[INF] STREAM: Starting nats-streaming-server[test-cluster] version 0.14.1
-[INF] STREAM: ServerID: qJXDf3guA7es2zhBzCoT6I
-[INF] STREAM: Go version: go1.11.9
+[INF] STREAM: Starting nats-streaming-server[test-cluster] version 0.15.1
+[INF] STREAM: ServerID: Y4y597WVLrWTxKykwx1L5g
+[INF] STREAM: Go version: go1.11.10
 [INF] STREAM: Git commit: [not set]
-[INF] Starting nats-server version 1.4.1
+[INF] Starting nats-server version 2.0.0
 [INF] Git commit [not set]
 [INF] Listening for client connections on 0.0.0.0:4222
+[INF] Server id is NATWWNPXILVPC7XI6SILWRP5GYIG2Q7PA5NDEKE5ZOBM5K5R5WMTKYH4
 [INF] Server is ready
 [INF] STREAM: Recovering the state...
 [INF] STREAM: No recovered state
@@ -2039,12 +2041,7 @@ if you want to ensure that each operation is immediately committed to the databa
 
 ## Clients
 
-Here is the list of NATS Streaming clients, supported by Synadia. We may add additional supported streaming clients in the future, and encourage community-contributed clients.
-
-- [C#](https://github.com/nats-io/csharp-nats-streaming)
-- [Go](https://github.com/nats-io/go-nats-streaming)
-- [Java](https://github.com/nats-io/java-nats-streaming)
-- [Node.js](https://github.com/nats-io/node-nats-streaming)
+You can find [here](https://nats.io/download/) the list of NATS Streaming clients supported by Synadia. There are also links to community-contributed clients.
 
 ## License
 

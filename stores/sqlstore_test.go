@@ -1,4 +1,4 @@
-// Copyright 2017-2018 The NATS Authors
+// Copyright 2017-2019 The NATS Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,9 +24,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nats-io/go-nats-streaming/pb"
 	"github.com/nats-io/nats-streaming-server/spb"
 	"github.com/nats-io/nats-streaming-server/test"
+	"github.com/nats-io/stan.go/pb"
 
 	_ "github.com/go-sql-driver/mysql" // mysql driver
 	_ "github.com/lib/pq"              // postgres driver
@@ -1818,4 +1818,41 @@ func TestSQLRecoverLastSeqAfterMessagesExpired(t *testing.T) {
 		t.Fatalf("Should be left with 6..5, got %v..%v", first, last)
 	}
 	s.Close()
+}
+
+func TestSQLMsgCacheAutoFlush(t *testing.T) {
+	if !doSQL {
+		t.SkipNow()
+	}
+
+	sqlMsgCacheLimit = 100
+	defer func() { sqlMsgCacheLimit = sqlDefaultMsgCacheLimit }()
+
+	cleanupSQLDatastore(t)
+	defer cleanupSQLDatastore(t)
+
+	// Create a store with caching enabled (which is default, but invoke option here)
+	s, err := NewSQLStore(testLogger, testSQLDriver, testSQLSource, nil, SQLNoCaching(false))
+	if err != nil {
+		t.Fatalf("Error creating store: %v", err)
+	}
+	defer s.Close()
+
+	cs := storeCreateChannel(t, s, "foo")
+	total := sqlMsgCacheLimit + 10
+	payload := make([]byte, 100)
+	for i := 0; i < total; i++ {
+		storeMsg(t, cs, "foo", uint64(i+1), payload)
+	}
+	// Check that we have started to write messages into the DB.
+	db := getDBConnection(t)
+	defer db.Close()
+	r := db.QueryRow("SELECT COUNT(seq) FROM Messages")
+	count := 0
+	if err := r.Scan(&count); err != nil {
+		t.Fatalf("Error on scan: %v", err)
+	}
+	if count == 0 {
+		t.Fatalf("Expected some messages, got none")
+	}
 }
