@@ -5389,12 +5389,21 @@ func (s *StanServer) limitWarner() {
 		for !stores.EnforcingLimits {
 			// fmt.Printf("Not enforcing limits yet...")
 		}
-		// fmt.Printf("Going to enforce limits...")
-		for k := range HbInboxMap {
-			s.ncs.Publish(k, []byte("My hands are full at the moment."))
-		}
+		fmt.Printf("Going to enforce limits...")
+
+		s.ncs.Publish("HANDS_FULL", []byte("My hands are full at the moment."))
+
 		for stores.EnforcingLimits {
 			// fmt.Printf("Enforcing limits!")
+		}
+	}
+}
+
+func (s *StanServer) limitWarnOnRegister() {
+	for {
+		if stores.EnforcingLimits && Registered {
+			s.ncs.Publish("HANDS_FULL", []byte("My hands are full at the moment."))
+			Registered = false
 		}
 	}
 }

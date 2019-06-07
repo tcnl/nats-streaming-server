@@ -27,8 +27,7 @@ const (
 	pruneKnownInvalidConns = 32
 )
 
-// HbInboxMap keeps HbInboxes
-var HbInboxMap = make(map[string]bool)
+var Registered = false
 
 // This is a proxy to the store interface.
 type clientStore struct {
@@ -101,7 +100,9 @@ func (cs *clientStore) register(info *spb.ClientInfo) (*client, error) {
 		}
 	}
 
-	HbInboxMap[c.info.HbInbox] = true
+	if stores.EnforcingLimits {
+		Registered = true
+	}
 
 	return c, nil
 }
@@ -130,7 +131,6 @@ func (cs *clientStore) unregister(ID string) (*client, error) {
 	}
 	err := cs.store.DeleteClient(ID)
 
-	delete(HbInboxMap, c.info.HbInbox)
 	return c, err
 }
 
