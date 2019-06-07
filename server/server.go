@@ -5391,18 +5391,20 @@ func (s *StanServer) limitWarner() {
 		}
 		fmt.Printf("Going to enforce limits...")
 
-		s.ncs.Publish("HANDS_FULL", []byte("My hands are full at the moment."))
+		s.ncs.Publish("HANDS_FULL", []byte("0"))
 
 		for stores.EnforcingLimits {
 			// fmt.Printf("Enforcing limits!")
 		}
+
+		s.ncs.Publish("HANDS_FULL", []byte("1"))
 	}
 }
 
 func (s *StanServer) limitWarnOnRegister() {
 	for {
 		if stores.EnforcingLimits && Registered {
-			s.ncs.Publish("HANDS_FULL", []byte("My hands are full at the moment."))
+			s.ncs.Publish("HANDS_FULL", []byte("0"))
 			Registered = false
 		}
 	}
