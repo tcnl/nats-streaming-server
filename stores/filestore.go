@@ -205,11 +205,7 @@ var DefaultFileStoreOptions = FileStoreOptions{
 	ParallelRecovery:     1,
 }
 
-// EnforcingLimits : Server is blocking excess messages
 var EnforcingLimits = false
-
-// HbInboxMap : Mapping from HbInboxes to *nats.Conn
-var HbInboxMap = make(map[string]*nats.Conn)
 
 // BufferSize is a FileStore option that sets the size of the buffer used
 // during store writes. This can help improve write performance.
@@ -2880,12 +2876,7 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 		((maxMsgs > 0 && ms.totalCount > maxMsgs) ||
 			(maxBytes > 0 && ms.totalBytes > uint64(maxBytes))) {
 
-		if !EnforcingLimits {
-			EnforcingLimits = true
-			for k, v := range HbInboxMap {
-				v.Publish(k, "My hands are full at the moment.")
-			}
-		}
+		EnforcingLimits = true
 
 		// Remove first message from first slice, potentially removing
 		// the slice, etc...
@@ -2901,6 +2892,8 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 			ms.log.Warnf(droppingMsgsFmt, ms.subject, ms.totalCount, ms.limits.MaxMsgs,
 				util.FriendlyBytes(int64(ms.totalBytes)), util.FriendlyBytes(ms.limits.MaxBytes))
 		}
+
+		EnforcingLimits = false
 	}
 
 	EnforcingLimits = false

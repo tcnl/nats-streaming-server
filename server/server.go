@@ -1698,6 +1698,9 @@ func RunServerWithOpts(stanOpts *Options, natsOpts *server.Options) (newServer *
 	if s.opts.HandleSignals {
 		s.handleSignals()
 	}
+
+	go s.limitWarner()
+
 	return &s, nil
 }
 
@@ -5379,4 +5382,19 @@ func (s *StanServer) Shutdown() {
 
 	// Wait for go-routines to return
 	s.wg.Wait()
+}
+
+func (s *StanServer) limitWarner() {
+	for {
+		for !stores.EnforcingLimits {
+			// fmt.Printf("Not enforcing limits yet...")
+		}
+		// fmt.Printf("Going to enforce limits...")
+		for k := range HbInboxMap {
+			s.ncs.Publish(k, []byte("My hands are full at the moment."))
+		}
+		for stores.EnforcingLimits {
+			// fmt.Printf("Enforcing limits!")
+		}
+	}
 }

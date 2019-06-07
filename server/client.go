@@ -18,18 +18,17 @@ import (
 	"sync"
 	"time"
 
-	EnforcingLimits "github.com/tcnl/nats-streaming-server/stores"
-	HbInboxMap "github.com/tcnl/nats-streaming-server/stores"
-
 	"github.com/nats-io/nats-streaming-server/spb"
 	"github.com/nats-io/nats-streaming-server/stores"
-	"github.com/nats-io/go-nats"
 )
 
 const (
 	maxKnownInvalidConns   = 256
 	pruneKnownInvalidConns = 32
 )
+
+// HbInboxMap keeps HbInboxes
+var HbInboxMap = make(map[string]bool)
 
 // This is a proxy to the store interface.
 type clientStore struct {
@@ -77,7 +76,7 @@ func getKnownInvalidKey(ID string, connID []byte) string {
 }
 
 // Register a new client. Returns ErrInvalidClient if client is already registered.
-func (cs *clientStore) register(info *spb.ClientInfo, conn *nats.Conn) (*client, error) {
+func (cs *clientStore) register(info *spb.ClientInfo) (*client, error) {
 	cs.Lock()
 	defer cs.Unlock()
 	c := cs.clients[info.ID]
@@ -92,7 +91,6 @@ func (cs *clientStore) register(info *spb.ClientInfo, conn *nats.Conn) (*client,
 	cs.clients[c.info.ID] = c
 	if len(c.info.ConnID) > 0 {
 		cs.connIDs[string(c.info.ConnID)] = c
-		HbInboxMap[c.info.HbInbox] = conn
 	}
 	delete(cs.knownInvalid, getKnownInvalidKey(info.ID, info.ConnID))
 	if cs.waitOnRegister != nil {
@@ -103,9 +101,7 @@ func (cs *clientStore) register(info *spb.ClientInfo, conn *nats.Conn) (*client,
 		}
 	}
 
-	if EnforcingLimits {
-		conn.Publish(c.info.HbInbox, "My hands are full at the moment.")
-	}
+	HbInboxMap[c.info.HbInbox] = true
 
 	return c, nil
 }
@@ -124,17 +120,17 @@ func (cs *clientStore) unregister(ID string) (*client, error) {
 		c.hbt = nil
 	}
 	connID := c.info.ConnID
-	hbInbox := c.info.HbInbox
 	c.Unlock()
 	delete(cs.clients, ID)
 	if len(connID) > 0 {
 		delete(cs.connIDs, string(connID))
-		delete(HbInboxMap, hbInbox)
 	}
 	if cs.waitOnRegister != nil {
 		delete(cs.waitOnRegister, ID)
 	}
 	err := cs.store.DeleteClient(ID)
+
+	delete(HbInboxMap, c.info.HbInbox)
 	return c, err
 }
 
