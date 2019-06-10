@@ -2894,6 +2894,8 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 		}
 	}
 
+	time.Sleep(time.Second * 5)
+
 	EnforcingLimits = false
 
 	return nil
