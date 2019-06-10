@@ -2872,28 +2872,37 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 	// message is quite big, etc...
 	maxMsgs := ms.limits.MaxMsgs
 	maxBytes := ms.limits.MaxBytes
-	for ms.totalCount > 1 &&
+
+	fmt.Printf("Enforcing limits!")
+
+	if ms.totalCount > 1 &&
 		((maxMsgs > 0 && ms.totalCount > maxMsgs) ||
 			(maxBytes > 0 && ms.totalBytes > uint64(maxBytes))) {
 
-		EnforcingLimits = true
+		for ms.totalCount > 1 &&
+			((maxMsgs > 0 && ms.totalCount > 0) ||
+				(maxBytes > 0 && ms.totalBytes > uint64(0))) {
 
-		// Remove first message from first slice, potentially removing
-		// the slice, etc...
-		if err := ms.removeFirstMsg(nil, lockFile); err != nil {
-			// We are not going to fail the publish, just report
-			// the error removing the first message.
-			// TODO: Is this the right thing to do?
-			ms.log.Errorf("Unable to remove first message: %v", err)
-			return nil
-		}
-		if reportHitLimit && !ms.hitLimit {
-			ms.hitLimit = true
-			ms.log.Warnf(droppingMsgsFmt, ms.subject, ms.totalCount, ms.limits.MaxMsgs,
-				util.FriendlyBytes(int64(ms.totalBytes)), util.FriendlyBytes(ms.limits.MaxBytes))
+			EnforcingLimits = true
+
+			// Remove first message from first slice, potentially removing
+			// the slice, etc...
+			if err := ms.removeFirstMsg(nil, lockFile); err != nil {
+				// We are not going to fail the publish, just report
+				// the error removing the first message.
+				// TODO: Is this the right thing to do?
+				ms.log.Errorf("Unable to remove first message: %v", err)
+				return nil
+			}
+			if reportHitLimit && !ms.hitLimit {
+				ms.hitLimit = true
+				ms.log.Warnf(droppingMsgsFmt, ms.subject, ms.totalCount, ms.limits.MaxMsgs,
+					util.FriendlyBytes(int64(ms.totalBytes)), util.FriendlyBytes(ms.limits.MaxBytes))
+			}
+
+			time.Sleep(time.Second * 1)
 		}
 
-		time.Sleep(time.Second * 1)
 	}
 
 	EnforcingLimits = false
