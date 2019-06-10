@@ -2892,9 +2892,9 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 			ms.log.Warnf(droppingMsgsFmt, ms.subject, ms.totalCount, ms.limits.MaxMsgs,
 				util.FriendlyBytes(int64(ms.totalBytes)), util.FriendlyBytes(ms.limits.MaxBytes))
 		}
-	}
 
-	time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 1)
+	}
 
 	EnforcingLimits = false
 
