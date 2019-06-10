@@ -2873,16 +2873,18 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 	maxMsgs := ms.limits.MaxMsgs
 	maxBytes := ms.limits.MaxBytes
 
-	fmt.Printf("Enforcing limits!")
-
+	//fmt.Printf("Enforcing limits!")
+	//fmt.Println("ms.totalcount: ", ms.totalCount)
+	//fmt.Println("reportHit e hitLimit ", reportHitLimit, !ms.hitLimit )
 	if ms.totalCount > 1 &&
 		((maxMsgs > 0 && ms.totalCount > maxMsgs) ||
 			(maxBytes > 0 && ms.totalBytes > uint64(maxBytes))) {
+				fmt.Println("Inside drop IF")
 
 		for ms.totalCount > 1 &&
 			((maxMsgs > 0 && ms.totalCount > 0) ||
 				(maxBytes > 0 && ms.totalBytes > uint64(0))) {
-
+			fmt.Println("Inside Drop FOR")				
 			EnforcingLimits = true
 
 			// Remove first message from first slice, potentially removing
@@ -2900,7 +2902,8 @@ func (ms *FileMsgStore) enforceLimits(reportHitLimit, lockFile bool) error {
 					util.FriendlyBytes(int64(ms.totalBytes)), util.FriendlyBytes(ms.limits.MaxBytes))
 			}
 
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Millisecond * 50)
+			fmt.Println("Remaining: ", ms.totalCount)
 		}
 
 	}
